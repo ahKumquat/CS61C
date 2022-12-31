@@ -1,3 +1,1 @@
-# CS61C
-# CS61C
-# CS61C
+# CS61C - Proj1
