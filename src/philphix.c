@@ -68,11 +68,88 @@ int main(int argc, char **argv) {
 /* Task 3 */
 void readDictionary(char *dictName) {
   // -- TODO --
-  fprintf(stderr, "You need to implement readDictionary\n");
+  //fprintf(stderr, "You need to implement readDictionary\n");
+  const int length = 60;
+  FILE *fp;
+  if((fp = fopen(dictName, "r")) != NULL){
+  	while (1) {
+		char *key = malloc(sizeof(char *) * length);
+		char *value = malloc(sizeof(char *) * length);
+		if(fscanf(fp, "%s%s", key, value) == EOF) {
+			break;
+		}
+
+		if(strlen(key) && strlen(value)) {
+			insertData(dictionary, key, value);
+		}
+  	}
+  	fclose(fp);
+  }else {
+	fprintf(stderr, "no file!\n");
+	exit(61);
+  }
+
 }
 
 /* Task 4 */
 void processInput() {
   // -- TODO --
-  fprintf(stderr, "You need to implement processInput\n");
+  //fprintf(stderr, "You need to implement processInput\n");
+  const int length = 60;
+  char *word = malloc(sizeof(char *)*length);
+  char ch;  
+  int index = 0;
+  
+  while ((ch = getchar()) != EOF || strlen(word) != 0) {
+    
+    if(isalpha(ch) || isdigit(ch)) {
+      strcpy(word + index++, &ch);
+	    continue;
+    }
+
+    strcpy(word + index, "\0");
+    index = 0;
+    char *str = malloc(sizeof(char *)*length);
+    strcpy(str, word);
+    
+    //exact word
+    char *result; 
+    result= (char *)findData(dictionary, word);
+    if(result != NULL) {
+	    output(result, ch, word, str);
+	  continue;
+    }
+    
+    //all but first character lowercase
+    int i; 
+    for(i = 1 ;i < strlen(word); i++){
+       *(word + i) = tolower(*(word + i));
+    }
+    result = (char*)findData(dictionary, word);
+    if(result != NULL) {
+      output(result, ch, word, str);
+      continue;      
+    } 
+
+    //all lowercase
+    *word = tolower(*word);
+    result = (char*)findData(dictionary, word);
+    if(result != NULL) {
+      output(result, ch, word, str);
+      continue;      
+    }
+
+    
+    //can't find
+    output(str, ch, word, str);
+    
+  }
+  free(word); 
+}
+
+void output(char* res, char ch, char* word, char* str){
+    printf("%s", res);
+    if(ch != EOF) printf("%c", ch);
+    memset(word, 0 ,sizeof(*word));
+    free(str);
 }
