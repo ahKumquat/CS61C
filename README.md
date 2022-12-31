@@ -1,1 +1,1 @@
-# CS61C - Proj1
+# CS61C - Project 1
